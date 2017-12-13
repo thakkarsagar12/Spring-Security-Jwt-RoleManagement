@@ -46,12 +46,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public AuthenticationProvider customAuthProvider() {
 		return (AuthenticationProvider) new CustomAuthProvider();
 	}
+	
+	@Bean
+	public AuthenticationProvider testAuthProvider() {
+		return (AuthenticationProvider) new TestAuthProvider();
+	}
 
 	@Bean
 	@Override
 	protected AuthenticationManager authenticationManager() throws Exception {
 		//return super.authenticationManager();
-		return new ProviderManager(Arrays.asList(customAuthProvider()));
+		return new ProviderManager(Arrays.asList(customAuthProvider(), testAuthProvider()));
 	}
 
 	@Override
@@ -61,10 +66,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		super.configure(auth);
 	}
 	
-	@Override
+	
+	/*@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.debug(true);
-	}
+	}*/
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -72,9 +78,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		        .sessionManagement()
 		        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		        .and()
-		       // .httpBasic()
-		       // .realmName(securityRealm)
-		       // .and()
+		        .httpBasic()
+		        .realmName(securityRealm)
+		        .and()
 		        .csrf()
 		        .disable();
 
@@ -97,6 +103,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public DefaultTokenServices tokenServices() {
 		DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
 		defaultTokenServices.setTokenStore(tokenStore());
+		defaultTokenServices.setAccessTokenValiditySeconds(0);
 		defaultTokenServices.setSupportRefreshToken(true);
 		return defaultTokenServices;
 	}

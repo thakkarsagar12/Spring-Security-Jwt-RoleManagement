@@ -22,8 +22,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Value("${security.jwt.client-id}")
 	private String clientId;
 
-	/*@Value("${security.jwt.client-secret}")
-	private String clientSecret;*/
+	@Value("${security.jwt.client-secret}")
+	private String clientSecret;
 
 	@Value("${security.jwt.grant-type}")
 	private String grantType;
@@ -34,8 +34,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	@Value("${security.jwt.scope-write}")
 	private String scopeWrite = "write";
 
-	@Value("${security.jwt.resource-ids}")
-	private String resourceIds;
+	/*@Value("${security.jwt.resource-ids}")
+	private String resourceIds;*/
 
 	@Autowired
 	private TokenStore tokenStore;
@@ -51,13 +51,15 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 		configurer
 		        .inMemory()
 		        .withClient(clientId)
-		        .autoApprove(true)
-		        //.secret(clientSecret)
+		        //.autoApprove(true)
+		        .secret(clientSecret)
 		        .authorizedGrantTypes(grantType)
-		        .scopes(scopeRead, scopeWrite)
-		        .resourceIds(resourceIds);
+		        .scopes(scopeRead, scopeWrite);
+		        //.resourceIds("testjwtresourceid");
 	}
 
+	
+	
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 		TokenEnhancerChain enhancerChain = new TokenEnhancerChain();

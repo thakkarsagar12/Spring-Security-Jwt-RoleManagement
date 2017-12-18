@@ -53,12 +53,12 @@ public class CustomAuthProvider implements AuthenticationProvider {
 		/*List<GrantedAuthority> authorities = new LinkedList<>();
 		SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ADMIN_USER");
 		authorities.add(authority);*/
-		return new UsernamePasswordAuthenticationToken(id, otp, authorities);
+		return new UsernamePasswordAuthenticationToken(id, null, authorities);
 	}
 
 	@Override
 	public boolean supports(Class<?> authentication) {
-		return true;
+		return authentication.equals(UsernamePasswordAuthenticationToken.class);
 	}
 
 	
